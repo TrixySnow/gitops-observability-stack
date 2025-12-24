@@ -73,7 +73,9 @@ admin
 
 **Password**
 ```bash
-kubectl get secret argocd-initial-admin-secret   -n argocd   -o jsonpath="{.data.password}" | base64 -d
+kubectl get secret argocd-initial-admin-secret \
+  -n argocd \
+  -o jsonpath="{.data.password}" | base64 -d
 ```
 
 ### (Optional) CLI Login
@@ -89,6 +91,7 @@ argocd login localhost:8080
 Before deploying any applications, the **Argo CD Projects** must be created.
 
 These define:
+
 - allowed source repositories
 - allowed destination namespaces
 - cluster-level permissions (CRDs, RBAC)
@@ -99,7 +102,7 @@ Apply the projects manifest:
 kubectl apply -k gitops/argo/projects
 ```
 
-This step is **mandatory**.  
+This step is **mandatory**.
 Without it, subsequent applications will fail authorization and sync.
 
 ---
@@ -137,17 +140,52 @@ This ensures **deterministic and reproducible platform state**.
 
 ---
 
-## 7. (Optional) Access Platform Components
+## 7. Configure Grafana Admin Credentials (Required)
+
+Grafana is configured to read admin credentials from an **externally managed Kubernetes Secret**.
+
+The secret **must exist before Grafana can be accessed**:
+
+```bash
+kubectl -n observability create secret generic grafana-admin \
+  --from-literal=admin-user=admin \
+  --from-literal=admin-password='CHANGE_ME'
+```
+
+Grafana access will not be available until this secret exists.
+
+---
+
+## 8. Configure Alertmanager Slack Webhooks (Required)
+
+Alertmanager requires **valid Slack Incoming Webhook URLs** to deliver notifications.
+
+The following files must be updated with real webhook values:
+
+- `gitops/apps/platform/observability/kube-prometheus-stack/values/values.yaml`
+- `gitops/apps/platform/observability/kube-prometheus-stack/values/values-dev.yaml`
+
+Locate the `slack_configs` section and replace the placeholder URLs:
+
+```yaml
+slack_configs:
+  - api_url: "https://hooks.slack.com/services/..."
+```
+
+After updating the files, **commit and push** the changes so Argo CD can reconcile them.
+
+---
+
+## 9. (Optional) Access Platform Components
 
 These steps are **not required for installation**, but useful for validation and demos.
 
 ### Grafana
 
-Retrieve admin password:
+Grafana uses the **externally provided admin credentials** created earlier.
 
-```bash
-kubectl -n observability get secret kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d
-```
+- **Username:** `admin`
+- **Password:** value defined in the `grafana-admin` Secret
 
 Port-forward Grafana:
 
@@ -180,6 +218,8 @@ http://localhost:9093
 ## Notes & Design Considerations
 
 - Argo CD Projects are a **hard prerequisite** for application sync
+- Grafana admin credentials are **provided externally by design**
+- Alertmanager requires **explicit notification configuration**
 - CRDs are managed explicitly and **not pruned**
 - All applications use automated sync with self-healing enabled
 - Namespace creation is handled automatically by Argo CD
@@ -193,9 +233,12 @@ After completing these steps:
 
 - Argo CD becomes the **authoritative control plane**
 - The observability stack is fully GitOps-managed
+- Dashboards and alerting become available once all required runtime configuration is provided
 - All future changes are performed via Git commits
 
 This bootstrap flow is designed to be:
+
 - minimal
 - deterministic
 - production-aligned
+

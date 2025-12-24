@@ -4,6 +4,10 @@ This repository implements a **production-grade observability stack** for Kubern
 
 It provides a clean, reproducible setup for **metrics, logs, dashboards, and alerting**, following patterns commonly used in **mid–large scale production environments**.
 
+> This repository demonstrates a production-grade observability platform
+> implemented using GitOps principles, designed for technical review and
+> real-world adaptation.
+
 The repository focuses **only on the Kubernetes and GitOps layers**.
 
 Infrastructure provisioning (cluster, networking, IAM, storage) is treated as an **external dependency** and intentionally kept out of scope.
@@ -87,7 +91,7 @@ flowchart TD
 ### Dashboards
 - **Grafana**
 - Preconfigured Loki datasource
-- Admin access enabled for demo purposes
+- Admin access enabled for evaluation and platform review
 
 ### Logs
 - **Grafana Loki** (SingleBinary mode)
@@ -203,11 +207,13 @@ The full bootstrap flow is documented separately:
 
 ---
 
-## Grafana Access (Demo)
+## Grafana Access
 
-Grafana is enabled to allow **interactive exploration of metrics and logs** as part of this demo.
+Grafana is enabled to allow **interactive exploration of metrics and logs** when evaluating or reviewing the observability platform.
 
-Authentication is intentionally simplified to reduce bootstrap friction and keep the focus on **GitOps structure and observability design**, not identity management.
+Grafana access requires a pre-created Kubernetes Secret (`grafana-admin`), as described in the installation guide.
+
+Authentication is intentionally externalized to keep the GitOps layer clean and avoid storing credentials in Git.
 
 ### Admin Credentials
 
@@ -218,12 +224,9 @@ grafana:
   admin:
     existingSecret: grafana-admin
 ```
+Refer to the installation guide for secret creation details:
 
-Create the secret manually before or after deployment:
-
-```bash
-kubectl -n observability create secret generic grafana-admin --from-literal=admin-user=admin --from-literal=admin-password='CHANGE_ME'
-```
+➡️ **[Installation & Bootstrap](docs/installation.md)**
 
 ### Production Considerations
 
